@@ -7,7 +7,7 @@ public class HooliganAI  implements IOthelloAI {
 
     public HooliganAI() {
         this.evaluator = new BoardEvaluator();
-        this.MAX_DEPTH = 2;
+        this.MAX_DEPTH = 1;
     }
 
     @Override
@@ -16,13 +16,12 @@ public class HooliganAI  implements IOthelloAI {
         int playerToMove = s.getPlayerInTurn();
         Position bestMove = new Position(-1, -1);
         ArrayList<Position> moves = s.legalMoves();
-        int startValue = 0;
+        int startValue = Integer.MIN_VALUE;
         
         for (var move: moves) {
             int[][] currentBoard = s.getBoard();
             GameState newState = new GameState(currentBoard, playerToMove);
             newState.insertToken(move);
-
             if (depth == this.MAX_DEPTH) {
                 int value = this.evaluator.evaluate(newState);
                 if (value >= startValue) {
