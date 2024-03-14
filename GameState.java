@@ -10,7 +10,7 @@ public class GameState {
 	private int[][] board; 		// Possible values: 0 (empty), 1 (black), -1 (white)
 	private int currentPlayer;
 	private static final int PLAYER_1 = 1; 	// The player who is next to put a token on the board. Value is 1 or 2.
-	private static final int PLAYER_2 = -1;
+	private static final int PLAYER_2 = 2;
 	private int size;  			// The number of columns = the number of rows on the board
 	
 	//************ Constructors ****************//
