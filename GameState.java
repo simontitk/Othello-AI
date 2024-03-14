@@ -7,8 +7,10 @@ import java.util.ArrayList;
  * @version 9.2.2018
  */
 public class GameState {
-	private int[][] board; 		// Possible values: 0 (empty), 1 (black), 2 (white)
-	private int currentPlayer; 	// The player who is next to put a token on the board. Value is 1 or 2.
+	private int[][] board; 		// Possible values: 0 (empty), 1 (black), -1 (white)
+	private int currentPlayer;
+	private static final int PLAYER_1 = 1; 	// The player who is next to put a token on the board. Value is 1 or 2.
+	private static final int PLAYER_2 = -1;
 	private int size;  			// The number of columns = the number of rows on the board
 	
 	//************ Constructors ****************//
@@ -18,25 +20,26 @@ public class GameState {
 	 * the two middle positions on the right-leaning diagonal contains token for white (player 2).
 	 * @param size Number of columns (and number of rows) in the board. Should be an even number
 	 * greater or equal to 4.
-	 * @param playerToStart The player who will go first. Should be 1 (black) or 2 (white).
+	 * @param playerToStart The player who will go first. Should be 1 (black) or -1 (white).
 	 */
 	public GameState(int size, int playerToStart){ 
 		this.size = size;
 		board = new int[size][size];
 		currentPlayer = playerToStart;
         int half = size/2-1;
-        board[half][half] = 1;
-        board[half+1][half+1] = 1;
-        board[half][half+1] = 2;
-        board[half+1][half] = 2;   
+        board[half][half] = PLAYER_1;
+        board[half+1][half+1] = PLAYER_1;
+        board[half][half+1] = PLAYER_2;
+        board[half+1][half] = PLAYER_2;
+		board[0][0] = PLAYER_2;   
 	}
 	
 	/**
 	 * Constructs a new game state that equals the one represented by the supplied board and player.
 	 * @param board The 2 dimensions of the array should have equal length, and possible values should be
-	 * 0 (empty), 1 (black) or 2 (white).
+	 * 0 (empty), 1 (black) or -1 (white).
 	 * @param playerToTakeTurn The player who will be the first to take a turn. Should be 1 (black) 
-	 * or 2 (white)
+	 * or -1 (white)
 	 */
 	public GameState(int[][] board, int playerToTakeTurn){ 
 		this.size = board.length;
@@ -58,7 +61,7 @@ public class GameState {
 	}
 
 	/**
-	 * Returns the player whose turn it is, i.e. 1 (black) or 2 (white).
+	 * Returns the player whose turn it is, i.e. 1 (black) or -1 (white).
 	 */
 	public int getPlayerInTurn(){
 		return currentPlayer;
@@ -69,7 +72,7 @@ public class GameState {
 	 * Skips the turn of the current player (without) changing the board.
 	 */
 	public void changePlayer(){
-		currentPlayer = currentPlayer == 1 ? 2 : 1;
+		currentPlayer = currentPlayer == PLAYER_1 ? PLAYER_2 : PLAYER_1;
 	}
 	
 	/**
@@ -91,7 +94,7 @@ public class GameState {
 	}
 	
 	/**
-	 * Counts tokens of the player 1 (black) and player 2 (white), respectively, and returns an array
+	 * Counts tokens of the player 1 (black) and player -1 (white), respectively, and returns an array
 	 * with the numbers in that order.
 	 */
 	public int[] countTokens(){
@@ -99,9 +102,9 @@ public class GameState {
     	int tokens2 = 0;
     	for (int i = 0; i < size; i++){
     		for (int j = 0; j < size; j++){
-    			if ( board[i][j] == 1 )
+    			if ( board[i][j] == PLAYER_1 )
     				tokens1++;
-    			else if ( board[i][j] == 2 )
+    			else if ( board[i][j] == PLAYER_2 )
     				tokens2++;
     		}
     	}
@@ -176,7 +179,7 @@ public class GameState {
      * @param deltaY The step to be taken in the delta direction. Should be -1 (up), 0 (none), or 1 (down).
      */
     private int captureInDirection(Position p, int deltaX, int deltaY){
-    	int opponent = (currentPlayer == 1 ? 2 : 1); 
+    	int opponent = (currentPlayer == PLAYER_1 ? PLAYER_2 : PLAYER_1); 
         
     	int captured = 0;
     	int cc = p.col;
