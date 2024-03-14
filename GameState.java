@@ -31,7 +31,6 @@ public class GameState {
         board[half+1][half+1] = PLAYER_1;
         board[half][half+1] = PLAYER_2;
         board[half+1][half] = PLAYER_2;
-		board[0][0] = PLAYER_2;   
 	}
 	
 	/**
