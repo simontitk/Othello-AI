@@ -14,7 +14,6 @@ public class BoardEvaluator {
     public int evaluate(GameState s) {
         int[][] board = s.getBoard();
         int score = 0;
-        
         for (int col = 0 ; col < 8; col++) {
             for (int row = 0; row < 8; row++ ){
                     score += this.boardValues[col][row] * (board[col][row] == 2 ? -1 : board[col][row]);
