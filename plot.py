@@ -2,6 +2,10 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import os
 
+"""
+A simple script that can be used to plot the response times logged by the AI agent.
+The .csv files have 3 expected columns, corresponding to the number of the move, the time it took in miliseconds, and the number of subsequent legal moves the agent had to choose from.
+"""
 
 PATH = "./logs/"
 SKIP_LAST = 0
