@@ -32,7 +32,7 @@ public class HooliganAI  implements IOthelloAI {
 
 // fields used for testing and logging
         this.turns = 0;
-        this.isLogging = false;
+        this.isLogging = true;
         this.isPruning = true;
         var date = LocalDateTime.now();
         this.date = (

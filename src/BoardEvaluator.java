@@ -1,6 +1,6 @@
 public class BoardEvaluator {
 
-    private final int CORNER_VALUE = 1000;
+    private final int CORNER_VALUE = 1_000_000;
     private final int EDGE_VALUE = 100;
     private final int DEFAULT_VALUE = 10;
     private final int INNER_EDGE_VALUE = 1;
