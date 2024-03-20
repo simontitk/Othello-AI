@@ -2,6 +2,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 public class HooliganAI  implements IOthelloAI {
 
@@ -23,7 +25,6 @@ public class HooliganAI  implements IOthelloAI {
             this.value = value;
         }
     }
-
 
     public HooliganAI() {
         this.evaluator = new BoardEvaluator();
@@ -72,12 +73,13 @@ public class HooliganAI  implements IOthelloAI {
     private int getMaxDepth(int boardSize) {
         switch (boardSize) {
             case 4: return 12;
-            case 6: return 8;
+            case 6: return 10;
             case 8: return 6;
             case 10: return 4;
             default: return 2;
         }
     }
+
 
     private MoveValue maxValue(GameState s, int depth, int alpha, int beta) {
         MoveValue mv = new MoveValue(new Position(-1, -1), Integer.MIN_VALUE);
@@ -85,7 +87,7 @@ public class HooliganAI  implements IOthelloAI {
             mv.value = this.evaluator.evaluate(s);
             return mv;
         }
-        for (Position move: s.legalMoves()) {
+        for (Position move: movesToCheck(s)) {
             GameState newState = new GameState(s.getBoard(), s.getPlayerInTurn());
             newState.insertToken(move);
             MoveValue newMv = minValue(newState, depth+1, alpha, beta);
@@ -108,7 +110,7 @@ public class HooliganAI  implements IOthelloAI {
             mv.value = this.evaluator.evaluate(s);
             return mv;
         }
-        for (Position move: s.legalMoves()) {
+        for (Position move: movesToCheck(s)) {
             GameState newState = new GameState(s.getBoard(), s.getPlayerInTurn());
             newState.insertToken(move);
             MoveValue newMv = this.maxValue(newState, depth+1, alpha, beta);
@@ -122,5 +124,29 @@ public class HooliganAI  implements IOthelloAI {
             }
         }
         return mv;
+    }
+
+    
+    private List<Position> movesToCheck(GameState s) {
+        int boardSize = s.getBoard().length;
+        List<Position> legalMoves = s.legalMoves();
+        if (boardSize == 4) {
+            return legalMoves; // in case of a 4x4 board, its possible to check the entire game tree (max 12 moves ahead)
+        }
+        List<Position> cornerMoves = new ArrayList<>();
+        for (Position move : legalMoves) {
+            if (isCorner(move, boardSize)) cornerMoves.add(move);
+        }
+        return cornerMoves.size() == 0 ? legalMoves : cornerMoves;
+    }
+
+
+    private boolean isCorner(Position position, int boardSize) {
+        return (
+            position.row == 0 && position.col == 0 ||
+            position.row == 0 && position.col == boardSize-1 ||
+            position.row == boardSize-1 && position.col == 0 ||
+            position.row == boardSize-1 && position.col == boardSize-1
+        );
     }
 }
